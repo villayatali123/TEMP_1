@@ -1,28 +1,29 @@
-name: CI-CD Workflow
+name: Node.js CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      # Add your build, test, linting steps here
-
-      # Example: Run npm install and npm test
-      - name: Install dependencies and run tests
-        run: |
-          npm install
-          npm test
-
-      - name: Print success message
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm test
+    - name: Print success message
         run: echo "Success: Code pushed or merged to master branch"
