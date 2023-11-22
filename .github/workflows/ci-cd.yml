@@ -25,5 +25,3 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm test
-    - name: Print success message
-        run: echo "Success: Code pushed or merged to master branch"
