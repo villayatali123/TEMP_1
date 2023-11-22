@@ -3,6 +3,8 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 
+//Interceptor
+const interceptor = require("express-interceptor");
 ///extra security packages
 
 const helmet = require("helmet");
@@ -47,6 +49,18 @@ app.use(xss());
 app.get("/", (req, res) => {
   res.send("Welcome to beginning of nothingness");
 });
+
+const requestInterceptor = interceptor((req, res) => ({
+  // Process the request object
+  isInterceptable: () => true, // Allow all requests to be intercepted
+  intercept: (body, send) => {
+    console.log(`Incoming ${req.method} request to ${req.path}`);
+    send(body);
+  },
+}));
+
+// Use the interceptor middleware
+app.use(requestInterceptor);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", authenticateUser, jobsRouter);
