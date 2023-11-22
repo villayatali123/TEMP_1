@@ -1,0 +1,28 @@
+name: CI-CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Add your build, test, linting steps here
+
+      # Example: Run npm install and npm test
+      - name: Install dependencies and run tests
+        run: |
+          npm install
+          npm test
+
+      - name: Print success message
+        run: echo "Success: Code pushed or merged to master branch"
